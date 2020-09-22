@@ -17,15 +17,15 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_start_and_retrive_list(self):
         # user notices webpage title and header mention "to-do" lists
-        head_text = self.browser.find_element_by_tag_name('h1')
-
         self.assertIn('To-Do', self.browser.title)
-        self.assertIn('To-To', head_text)
+
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text)
 
         # user is invited to enter a to-item straight away
         inputbox = self.browser.find_element_by_id('id_new_item')
 
-        self.assertEqual(inputbox.get_attributes('placeholder'), 'enter a to-do item')
+        self.assertEqual(inputbox.get_attribute('placeholder'), 'enter a to-do item')
 
         # user typer "buy new shoes" into a text box
         inputbox.send_keys('buy new shoes')
@@ -36,9 +36,10 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
 
         table = self.browser.find_element_by_id('id_list_table')
+
         rows = table.find_elements_by_tag_name('tr')
 
-        self.assertTrue(any(row.text == '1: buy new shoes') for row in rows)
+        self.assertTrue(any(row.text == '1: buy new shoes' for row in rows))
 
         # there is still a text box inviting the user to add another item
         # user enters "check shoes"
