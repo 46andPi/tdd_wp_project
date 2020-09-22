@@ -1,5 +1,7 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
+import time
 
 
 class NewVisitorTest(unittest.TestCase):
@@ -15,16 +17,28 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_start_and_retrive_list(self):
         # user notices webpage title and header mention "to-do" lists
-        self.assertIn('To-Do', self.browser.title, f'browser title was "{self.browser.title}"')
+        head_text = self.browser.find_element_by_tag_name('h1')
 
-        self.fail('finish the test')
+        self.assertIn('To-Do', self.browser.title)
+        self.assertIn('To-To', head_text)
 
         # user is invited to enter a to-item straight away
+        inputbox = self.browser.find_element_by_id('id_new_item')
+
+        self.assertEqual(inputbox.get_attributes('placeholder'), 'enter a to-do item')
 
         # user typer "buy new shoes" into a text box
+        inputbox.send_keys('buy new shoes')
 
         # when user hits enter, the webpage updates and now the webpages lists:
         # "1: buy new shoes" as an item in a to-do list
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+
+        self.assertTrue(any(row.text == '1: buy new shoes') for row in rows)
 
         # there is still a text box inviting the user to add another item
         # user enters "check shoes"
@@ -35,6 +49,9 @@ class NewVisitorTest(unittest.TestCase):
         # then user sees that the webpage ahs generated a uqique URL for him/her
 
         # user visits that URL; user's to-do list is still there
+
+
+        self.fail('finish the test!')
 
 
 if __name__ == '__main__':
