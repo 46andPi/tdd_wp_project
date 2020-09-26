@@ -39,10 +39,22 @@ class NewVisitorTest(unittest.TestCase):
 
         rows = table.find_elements_by_tag_name('tr')
 
-        self.assertTrue(any(row.text == '1: buy new shoes' for row in rows))
+        # self.assertTrue(any(row.text == '1: buy new shoes' for row in rows),
+        #                 f'new item did not appear in table; contents were:\n{table.text}')
+        self.assertIn('1: buy new shoes', [row.text for row in rows])
 
         # there is still a text box inviting the user to add another item
         # user enters "check shoes"
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('check shoes')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+
+        self.assertIn('1: buy new shoes', [row.text for row in rows])
+        self.assertIn('2: check shoes', [row.text for row in rows])
+
 
         # the webpage updates again and now shows both items on her list
 

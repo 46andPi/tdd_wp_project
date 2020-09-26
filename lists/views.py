@@ -1,5 +1,5 @@
 from django.shortcuts import render
 
 
-def home_page(http_request):
-    return render(http_request, 'lists/home.html')
+def home_page(request):
+    return render(request, 'lists/home.html', {'new_item_text': request.POST.get('item_text', '')})
