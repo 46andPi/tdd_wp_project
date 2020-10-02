@@ -1,16 +1,17 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
 import time
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome(executable_path='/usr/lib/chromium-browser/chromedriver')
 
         ## user visits webpage
-        self.browser.get('http://localhost:8000/')
+        # self.browser.get('http://localhost:8000/')
+        self.browser.get(self.live_server_url)
 
     def tearDown(self):
         self.browser.quit()
@@ -65,7 +66,3 @@ class NewVisitorTest(unittest.TestCase):
 
 
         self.fail('finish the test!')
-
-
-if __name__ == '__main__':
-    unittest.main()
