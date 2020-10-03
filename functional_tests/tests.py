@@ -23,7 +23,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser = webdriver.Chrome(executable_path=DRIVER_PATH)
         self.browser.get(self.live_server_url)
 
-    def wait_for_row_in_table(self, row_text):
+    def assert_for_row_in_table(self, row_text):
         start_time = time.time()
         while True:
             try:
@@ -62,7 +62,7 @@ class NewVisitorTest(LiveServerTestCase):
         # "1: buy new shoes" as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
 
-        self.wait_for_row_in_table(f'1: {todo_1}')
+        self.assert_for_row_in_table(f'1: {todo_1}')
 
         # there is still a text box inviting the user to add another item
         # user enters "check shoes"
@@ -71,8 +71,8 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys(todo_2)
         inputbox.send_keys(Keys.ENTER)
 
-        # self.wait_for_row_in_table(f'1: {todo_1}')
-        self.wait_for_row_in_table(f'2: {todo_2}')
+        # self.assert_for_row_in_table(f'1: {todo_1}')
+        self.assert_for_row_in_table(f'2: {todo_2}')
 
         # user is satisfied and leaves
 
@@ -92,7 +92,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys(usr_1_todo_1)
         inputbox.send_keys(Keys.ENTER)
 
-        self.wait_for_row_in_table(f'1: {usr_1_todo_1}')
+        self.assert_for_row_in_table(f'1: {usr_1_todo_1}')
 
         # user notices that his list has a unique URL
         first_users_list = self.browser.current_url
@@ -116,7 +116,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys(usr_2_todo_1)
         inputbox.send_keys(Keys.ENTER)
 
-        self.wait_for_row_in_table(f'1: {usr_2_todo_1}')
+        self.assert_for_row_in_table(f'1: {usr_2_todo_1}')
 
         # second user gets his own unique URL
         second_users_list = self.browser.current_url
