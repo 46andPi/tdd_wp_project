@@ -23,7 +23,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser = webdriver.Chrome(executable_path=DRIVER_PATH)
         self.browser.get(self.live_server_url)
 
-    def assert_for_row_in_table(self, row_text):
+    def assert_row_in_table(self, row_text):
         start_time = time.time()
         while True:
             try:
@@ -62,7 +62,7 @@ class NewVisitorTest(LiveServerTestCase):
         # "1: buy new shoes" as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
 
-        self.assert_for_row_in_table(f'1: {todo_1}')
+        self.assert_row_in_table(f'1: {todo_1}')
 
         # there is still a text box inviting the user to add another item
         # user enters "check shoes"
@@ -71,8 +71,8 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys(todo_2)
         inputbox.send_keys(Keys.ENTER)
 
-        # self.assert_for_row_in_table(f'1: {todo_1}')
-        self.assert_for_row_in_table(f'2: {todo_2}')
+        # self.assert_row_in_table(f'1: {todo_1}')
+        self.assert_row_in_table(f'2: {todo_2}')
 
         # user is satisfied and leaves
 
@@ -92,7 +92,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys(usr_1_todo_1)
         inputbox.send_keys(Keys.ENTER)
 
-        self.assert_for_row_in_table(f'1: {usr_1_todo_1}')
+        self.assert_row_in_table(f'1: {usr_1_todo_1}')
 
         # user notices that his list has a unique URL
         first_users_list = self.browser.current_url
@@ -116,7 +116,7 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox.send_keys(usr_2_todo_1)
         inputbox.send_keys(Keys.ENTER)
 
-        self.assert_for_row_in_table(f'1: {usr_2_todo_1}')
+        self.assert_row_in_table(f'1: {usr_2_todo_1}')
 
         # second user gets his own unique URL
         second_users_list = self.browser.current_url
@@ -129,3 +129,27 @@ class NewVisitorTest(LiveServerTestCase):
 
         self.assertNotIn(usr_1_todo_1, page_text)
         self.assertIn(usr_2_todo_1, page_text)
+
+    def test_layout_and_styling(self):
+        # user visits home page
+        self.setup_browser()
+        self.browser.set_window_size(1024, 768)
+
+        # user notices the input box is nicely centered
+        inputbox = self.browser.find_element_by_id('id_new_item')
+
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=10
+        )
+
+        # user starts a new list; sees the input is nicely centered there too
+        inputbox.send_keys('testing')
+        inputbox.send_keys(Keys.ENTER)
+
+        self.assert_row_in_table('1: testing')
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2, 512, delta=10
+        )
