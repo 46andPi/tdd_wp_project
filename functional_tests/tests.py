@@ -7,7 +7,7 @@ import os
 
 
 MAX_WAIT = 10
-DRIVER_PATH = '/usr/lib/chromium-browser/chromedriver'
+# DRIVER_PATH = '/usr/lib/chromium-browser/chromedriver'
 
 
 class NewVisitorTest(StaticLiveServerTestCase):
@@ -24,7 +24,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         if staging_server:
             self.live_server_url = f'http://{staging_server}'
 
-        self.browser = webdriver.Chrome(executable_path=DRIVER_PATH)
+        # self.browser = webdriver.Chrome(executable_path=DRIVER_PATH)
+        self.browser = webdriver.Chrome()
         self.browser.get(self.live_server_url)
 
     def assert_row_in_table(self, row_text):
